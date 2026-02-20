@@ -1,181 +1,260 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TEFL Data Interface</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    animation: {
-                        'fade-in': 'fadeIn 0.5s ease-in-out',
-                        'slide-up': 'slideUp 0.3s ease-out'
-                    }
-                }
-            }
-        }
+      tailwind.config = {
+        theme: {
+          extend: {
+            animation: {
+              "fade-in": "fadeIn 0.5s ease-in-out",
+              "slide-up": "slideUp 0.3s ease-out",
+            },
+          },
+        },
+      };
     </script>
     <style>
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
     </style>
-</head>
+  </head>
 
-<body class="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen">
+  <body
+    class="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen"
+  >
     <!-- Header -->
-    <header class="bg-white/80 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b border-indigo-100">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <div
-                        class="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
-                        <span class="text-white font-bold text-lg">T</span>
-                    </div>
-                    <h1
-                        class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                        TEFL Data Interface
-                    </h1>
-                </div>
-                <div class="text-sm text-gray-500" id="dataCount">
-                    Loading...
-                </div>
+    <header
+      class="bg-white/80 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b border-indigo-100"
+    >
+      <div class="container mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <a
+              href="tefl-test.html"
+              class="flex items-center text-indigo-600 hover:text-purple-600 transition-colors p-1 -ml-2"
+              title="Buka Soal Test"
+            >
+              <svg
+                class="w-6 h-6 md:w-5 md:h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+                ></path>
+              </svg>
+              <span class="hidden md:block ml-1 font-medium">Soal</span>
+            </a>
+            <div
+              class="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center"
+            >
+              <span class="text-white font-bold text-lg">T</span>
             </div>
+            <h1
+              class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent truncate"
+            >
+              TEFL Data Interface
+            </h1>
+          </div>
+          <div class="text-sm text-gray-500" id="dataCount">Loading...</div>
         </div>
+      </div>
     </header>
 
     <!-- Main Content -->
     <main class="container mx-auto px-6 py-8">
-        <!-- Controls -->
-        <div class="mb-8 animate-fade-in">
-            <div class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-white/20">
-                <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
-                    <div class="flex-1 max-w-md">
-                        <div class="relative">
-                            <input type="text" id="searchInput" placeholder="Search data..."
-                                class="w-full px-4 py-3 pl-12 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white/80">
-                            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex gap-3">
-                        <button id="gridViewBtn"
-                            class="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-all duration-200 flex items-center gap-2 shadow-lg">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
-                                </path>
-                            </svg>
-                            Grid
-                        </button>
-                        <button id="tableViewBtn"
-                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all duration-200 flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
-                            </svg>
-                            Table
-                        </button>
-                    </div>
+      <!-- Controls -->
+      <div class="mb-8 animate-fade-in">
+        <div
+          class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-white/20"
+        >
+          <div
+            class="flex flex-col md:flex-row gap-4 items-center justify-between"
+          >
+            <div class="flex-1 max-w-md">
+              <div class="relative">
+                <input
+                  type="text"
+                  id="searchInput"
+                  placeholder="Search data..."
+                  class="w-full px-4 py-3 pl-12 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white/80"
+                />
+                <div
+                  class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"
+                >
+                  <svg
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    ></path>
+                  </svg>
                 </div>
+              </div>
             </div>
+            <div class="flex gap-3">
+              <button
+                id="gridViewBtn"
+                class="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-all duration-200 flex items-center gap-2 shadow-lg"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                  ></path>
+                </svg>
+                Grid
+              </button>
+              <button
+                id="tableViewBtn"
+                class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all duration-200 flex items-center gap-2"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 6h16M4 10h16M4 14h16M4 18h16"
+                  ></path>
+                </svg>
+                Table
+              </button>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <!-- Data Display -->
-        <div id="dataContainer" class="animate-slide-up">
-            <!-- Data will be rendered here -->
-        </div>
+      <!-- Data Display -->
+      <div id="dataContainer" class="animate-slide-up">
+        <!-- Data will be rendered here -->
+      </div>
 
-        <!-- Loading -->
-        <div id="loading" class="flex items-center justify-center py-12">
-            <div class="animate-spin w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full"></div>
-            <span class="ml-3 text-gray-600">Loading data...</span>
-        </div>
+      <!-- Loading -->
+      <div id="loading" class="flex items-center justify-center py-12">
+        <div
+          class="animate-spin w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full"
+        ></div>
+        <span class="ml-3 text-gray-600">Loading data...</span>
+      </div>
 
-        <!-- No Data -->
-        <div id="noData" class="hidden text-center py-12">
-            <div class="text-gray-400 text-6xl mb-4">📄</div>
-            <h3 class="text-xl font-semibold text-gray-600 mb-2">No Data Found</h3>
-            <p class="text-gray-500">Please check your JSON file or search criteria.</p>
-        </div>
+      <!-- No Data -->
+      <div id="noData" class="hidden text-center py-12">
+        <div class="text-gray-400 text-6xl mb-4">📄</div>
+        <h3 class="text-xl font-semibold text-gray-600 mb-2">No Data Found</h3>
+        <p class="text-gray-500">
+          Please check your JSON file or search criteria.
+        </p>
+      </div>
     </main>
 
     <script>
-        let teflData = [];
-        let filteredData = [];
-        let currentView = 'grid';
+      let teflData = [];
+      let filteredData = [];
+      let currentView = "grid";
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function () {
-            loadData();
-            setupEventListeners();
-        });
+      // Initialize
+      document.addEventListener("DOMContentLoaded", function () {
+        loadData();
+        setupEventListeners();
+      });
 
-        function setupEventListeners() {
-            document.getElementById('searchInput').addEventListener('input', handleSearch);
-            document.getElementById('gridViewBtn').addEventListener('click', () => switchView('grid'));
-            document.getElementById('tableViewBtn').addEventListener('click', () => switchView('table'));
-        }
+      function setupEventListeners() {
+        document
+          .getElementById("searchInput")
+          .addEventListener("input", handleSearch);
+        document
+          .getElementById("gridViewBtn")
+          .addEventListener("click", () => switchView("grid"));
+        document
+          .getElementById("tableViewBtn")
+          .addEventListener("click", () => switchView("table"));
+      }
 
-        async function loadData() {
-            try {
-                // Fetch tefl.json
-                const response = await fetch('tefl.json');
-                if (response.ok) {
-                    const jsonData = await response.json();
-                    // Gabungkan listening, reading, structure
-                    if (jsonData && jsonData.props) {
-                        const listening = Array.isArray(jsonData.props.listening) ? jsonData.props.listening : [];
-                        const reading = Array.isArray(jsonData.props.reading) ? jsonData.props.reading : [];
-                        const structure = Array.isArray(jsonData.props.structure) ? jsonData.props.structure : [];
-                        teflData = [...listening, ...reading, ...structure];
-                    } else {
-                        teflData = [];
-                    }
-                } else {
-                    throw new Error('File not found');
-                }
-                filteredData = [...teflData];
-                updateDataCount();
-                renderData();
-                hideLoading();
-            } catch (error) {
-                console.error('Error loading data:', error);
-                showFileUpload();
-                hideLoading();
+      async function loadData() {
+        try {
+          // Fetch tefl.json
+          const response = await fetch("tefl.json");
+          if (response.ok) {
+            const jsonData = await response.json();
+            // Gabungkan listening, reading, structure
+            if (jsonData && jsonData.props) {
+              const listening = Array.isArray(jsonData.props.listening)
+                ? jsonData.props.listening
+                : [];
+              const reading = Array.isArray(jsonData.props.reading)
+                ? jsonData.props.reading
+                : [];
+              const structure = Array.isArray(jsonData.props.structure)
+                ? jsonData.props.structure
+                : [];
+              teflData = [...listening, ...reading, ...structure];
+            } else {
+              teflData = [];
             }
+          } else {
+            throw new Error("File not found");
+          }
+          filteredData = [...teflData];
+          updateDataCount();
+          renderData();
+          hideLoading();
+        } catch (error) {
+          console.error("Error loading data:", error);
+          showFileUpload();
+          hideLoading();
         }
+      }
 
-        function showFileUpload() {
-            const container = document.getElementById('dataContainer');
-            container.innerHTML = `
+      function showFileUpload() {
+        const container = document.getElementById("dataContainer");
+        container.innerHTML = `
                 <div class="text-center py-12">
                     <div class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-white/20 max-w-md mx-auto">
                         <div class="text-indigo-500 text-6xl mb-4">📁</div>
@@ -190,95 +269,115 @@
                 </div>
             `;
 
-            document.getElementById('fileInput').addEventListener('change', handleFileUpload);
-        }
+        document
+          .getElementById("fileInput")
+          .addEventListener("change", handleFileUpload);
+      }
 
-        function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (file && file.type === 'application/json') {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    try {
-                        const jsonData = JSON.parse(e.target.result);
-                        // Gabungkan listening, reading, structure
-                        if (jsonData && jsonData.props) {
-                            const listening = Array.isArray(jsonData.props.listening) ? jsonData.props.listening : [];
-                            const reading = Array.isArray(jsonData.props.reading) ? jsonData.props.reading : [];
-                            const structure = Array.isArray(jsonData.props.structure) ? jsonData.props.structure : [];
-                            teflData = [...listening, ...reading, ...structure];
-                        } else {
-                            teflData = [];
-                        }
-                        filteredData = [...teflData];
-                        updateDataCount();
-                        renderData();
-                    } catch (error) {
-                        alert('Error parsing JSON file: ' + error.message);
-                    }
-                };
-                reader.readAsText(file);
-            } else {
-                alert('Please select a valid JSON file.');
+      function handleFileUpload(event) {
+        const file = event.target.files[0];
+        if (file && file.type === "application/json") {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            try {
+              const jsonData = JSON.parse(e.target.result);
+              // Gabungkan listening, reading, structure
+              if (jsonData && jsonData.props) {
+                const listening = Array.isArray(jsonData.props.listening)
+                  ? jsonData.props.listening
+                  : [];
+                const reading = Array.isArray(jsonData.props.reading)
+                  ? jsonData.props.reading
+                  : [];
+                const structure = Array.isArray(jsonData.props.structure)
+                  ? jsonData.props.structure
+                  : [];
+                teflData = [...listening, ...reading, ...structure];
+              } else {
+                teflData = [];
+              }
+              filteredData = [...teflData];
+              updateDataCount();
+              renderData();
+            } catch (error) {
+              alert("Error parsing JSON file: " + error.message);
             }
+          };
+          reader.readAsText(file);
+        } else {
+          alert("Please select a valid JSON file.");
+        }
+      }
+
+      function handleSearch(e) {
+        const query = e.target.value.toLowerCase();
+        filteredData = teflData.filter((item) =>
+          Object.values(item).some(
+            (value) => value && value.toString().toLowerCase().includes(query),
+          ),
+        );
+        updateDataCount();
+        renderData();
+      }
+
+      function switchView(view) {
+        currentView = view;
+
+        // Update button styles
+        const gridBtn = document.getElementById("gridViewBtn");
+        const tableBtn = document.getElementById("tableViewBtn");
+
+        if (view === "grid") {
+          gridBtn.className =
+            "px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-all duration-200 flex items-center gap-2 shadow-lg";
+          tableBtn.className =
+            "px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all duration-200 flex items-center gap-2";
+        } else {
+          gridBtn.className =
+            "px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all duration-200 flex items-center gap-2";
+          tableBtn.className =
+            "px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-all duration-200 flex items-center gap-2 shadow-lg";
         }
 
-        function handleSearch(e) {
-            const query = e.target.value.toLowerCase();
-            filteredData = teflData.filter(item =>
-                Object.values(item).some(value =>
-                    value && value.toString().toLowerCase().includes(query)
-                )
-            );
-            updateDataCount();
-            renderData();
+        renderData();
+      }
+
+      function renderData() {
+        const container = document.getElementById("dataContainer");
+
+        if (filteredData.length === 0) {
+          showNoData();
+          return;
         }
 
-        function switchView(view) {
-            currentView = view;
+        hideNoData();
 
-            // Update button styles
-            const gridBtn = document.getElementById('gridViewBtn');
-            const tableBtn = document.getElementById('tableViewBtn');
-
-            if (view === 'grid') {
-                gridBtn.className = 'px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-all duration-200 flex items-center gap-2 shadow-lg';
-                tableBtn.className = 'px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all duration-200 flex items-center gap-2';
-            } else {
-                gridBtn.className = 'px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all duration-200 flex items-center gap-2';
-                tableBtn.className = 'px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-all duration-200 flex items-center gap-2 shadow-lg';
-            }
-
-            renderData();
+        if (currentView === "grid") {
+          renderGridView(container);
+        } else {
+          renderTableView(container);
         }
+      }
 
-        function renderData() {
-            const container = document.getElementById('dataContainer');
-
-            if (filteredData.length === 0) {
-                showNoData();
-                return;
-            }
-
-            hideNoData();
-
-            if (currentView === 'grid') {
-                renderGridView(container);
-            } else {
-                renderTableView(container);
-            }
-        }
-
-        function renderGridView(container) {
-            const gridHTML = `
+      function renderGridView(container) {
+        const gridHTML = `
                 <div class="space-y-8">
-                    ${filteredData.map(item => {
-                const title = item.modul || 'No Modul';
-                const category = item.question_category || '-';
-                const status = item.status_aktif === 1 ? 'Aktif' : 'Nonaktif';
-                const created = item.created_at ? new Date(item.created_at).toLocaleDateString() : '-';
-                const updated = item.updated_at ? new Date(item.updated_at).toLocaleDateString() : '-';
-                const questions = Array.isArray(item.questions) ? item.questions : [];
-                return `
+                    ${filteredData
+                      .map((item) => {
+                        const title = item.modul || "No Modul";
+                        const category = item.question_category || "-";
+                        const status =
+                          item.status_aktif === 1 ? "Aktif" : "Nonaktif";
+                        const created = item.created_at
+                          ? new Date(item.created_at).toLocaleDateString()
+                          : "-";
+                        const updated = item.updated_at
+                          ? new Date(item.updated_at).toLocaleDateString()
+                          : "-";
+                        const questions = Array.isArray(item.questions)
+                          ? item.questions
+                          : [];
+                        return `
                         <div class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-white/20">
                             <div class="flex items-center justify-between mb-4">
                                 <div>
@@ -291,39 +390,54 @@
                             <div class="mt-4">
                                 <h4 class="font-semibold mb-2">Questions (${questions.length}):</h4>
                                 <div class="space-y-4">
-                                    ${questions.map((q, idx) => {
-                    const qText = q.question || '(No question text)';
-                    const answers = Array.isArray(q.answer) ? q.answer : [];
-                                    const audio = q.source_audio ? `<audio controls src="https://language-test.itats.ac.id/${q.source_audio}" class="mt-2"></audio>` : '';
-                                    let image = '';
-                                    if (item.question_category === 'reading' && q.source_image) {
-                                                        image = `<img src="source_image/${q.source_image.split('/').pop()}" alt="Source Image" class="mt-2 w-full h-auto rounded shadow object-contain" style="max-width:1000px;max-height:700px;display:block;margin:auto;" />`;
-                                    }
-                    const trueAnswer = typeof q.true_answer === 'number' ? q.true_answer : null;
-                    return `
+                                    ${questions
+                                      .map((q, idx) => {
+                                        const qText =
+                                          q.question || "(No question text)";
+                                        const answers = Array.isArray(q.answer)
+                                          ? q.answer
+                                          : [];
+                                        const audio = q.source_audio
+                                          ? `<audio controls src="https://language-test.itats.ac.id/${q.source_audio}" class="mt-2"></audio>`
+                                          : "";
+                                        let image = "";
+                                        if (
+                                          item.question_category ===
+                                            "reading" &&
+                                          q.source_image
+                                        ) {
+                                          image = `<img src="source_image/${q.source_image.split("/").pop()}" alt="Source Image" class="mt-2 w-full h-auto rounded shadow object-contain" style="max-width:1000px;max-height:700px;display:block;margin:auto;" />`;
+                                        }
+                                        const trueAnswer =
+                                          typeof q.true_answer === "number"
+                                            ? q.true_answer
+                                            : null;
+                                        return `
                                             <div class="p-4 rounded-lg border border-gray-200 bg-gray-50">
                                                 <div class="font-medium text-indigo-700 mb-1">Q${idx + 1}: ${qText}</div>
                                                 ${audio}
                                                 ${image}
                                                 <ul class="list-decimal ml-6 mt-2">
-                                                    ${answers.map((ans, i) => `<li${trueAnswer === i ? ' class=\"font-bold text-green-700\"' : ''}>${ans}</li>`).join('')}
+                                                    ${answers.map((ans, i) => `<li${trueAnswer === i ? ' class=\"font-bold text-green-700\"' : ""}>${ans}</li>`).join("")}
                                                 </ul>
-                                                ${trueAnswer !== null ? `<div class=\"mt-2 text-sm text-green-700\">Kunci Jawaban: ${answers[trueAnswer] || '-'}</div>` : ''}
+                                                ${trueAnswer !== null ? `<div class=\"mt-2 text-sm text-green-700\">Kunci Jawaban: ${answers[trueAnswer] || "-"}</div>` : ""}
                                             </div>
                                         `;
-                }).join('')}
+                                      })
+                                      .join("")}
                                 </div>
                             </div>
                         </div>
                         `;
-            }).join('')}
+                      })
+                      .join("")}
                 </div>
             `;
-            container.innerHTML = gridHTML;
-        }
+        container.innerHTML = gridHTML;
+      }
 
-        function renderTableView(container) {
-            const tableHTML = `
+      function renderTableView(container) {
+        const tableHTML = `
                 <div class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden border border-white/20">
                     <div class="overflow-x-auto">
                         <table class="w-full">
@@ -338,15 +452,32 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
-                                ${filteredData.map((item, index) => {
-                const title = item.modul || 'No Modul';
-                const category = item.question_category || '-';
-                const status = item.status_aktif === 1 ? 'Aktif' : 'Nonaktif';
-                const created = item.created_at ? new Date(item.created_at).toLocaleDateString() : '-';
-                const updated = item.updated_at ? new Date(item.updated_at).toLocaleDateString() : '-';
-                const questions = Array.isArray(item.questions) ? item.questions : [];
-                return `
-                                    <tr class="hover:bg-indigo-50/50 transition-colors duration-200 ${index % 2 === 0 ? 'bg-white/30' : 'bg-gray-50/30'}">
+                                ${filteredData
+                                  .map((item, index) => {
+                                    const title = item.modul || "No Modul";
+                                    const category =
+                                      item.question_category || "-";
+                                    const status =
+                                      item.status_aktif === 1
+                                        ? "Aktif"
+                                        : "Nonaktif";
+                                    const created = item.created_at
+                                      ? new Date(
+                                          item.created_at,
+                                        ).toLocaleDateString()
+                                      : "-";
+                                    const updated = item.updated_at
+                                      ? new Date(
+                                          item.updated_at,
+                                        ).toLocaleDateString()
+                                      : "-";
+                                    const questions = Array.isArray(
+                                      item.questions,
+                                    )
+                                      ? item.questions
+                                      : [];
+                                    return `
+                                    <tr class="hover:bg-indigo-50/50 transition-colors duration-200 ${index % 2 === 0 ? "bg-white/30" : "bg-gray-50/30"}">
                                         <td class="px-6 py-4"><span class="inline-block px-3 py-1 text-xs font-bold rounded-full ${getLevelColor(category)}">${category.toUpperCase()}</span></td>
                                         <td class="px-6 py-4 font-bold text-indigo-700">${title}</td>
                                         <td class="px-6 py-4 text-sm text-gray-900">${status}</td>
@@ -354,70 +485,88 @@
                                         <td class="px-6 py-4 text-sm text-gray-900">${updated}</td>
                                         <td class="px-6 py-4">
                                             <div class="space-y-2">
-                                                ${questions.map((q, idx) => {
-                    const qText = q.question || '(No question text)';
-                    const answers = Array.isArray(q.answer) ? q.answer : [];
-                                                    const audio = q.source_audio ? `<audio controls src="https://language-test.itats.ac.id/${q.source_audio}" class="mt-2"></audio>` : '';
-                                                    let image = '';
-                                                    if (item.question_category === 'reading' && q.source_image) {
-                                                        image = `<img src="source_image/${q.source_image.split('/').pop()}" alt="Source Image" class="mt-2 w-full rounded shadow object-contain" />`;
+                                                ${questions
+                                                  .map((q, idx) => {
+                                                    const qText =
+                                                      q.question ||
+                                                      "(No question text)";
+                                                    const answers =
+                                                      Array.isArray(q.answer)
+                                                        ? q.answer
+                                                        : [];
+                                                    const audio = q.source_audio
+                                                      ? `<audio controls src="https://language-test.itats.ac.id/${q.source_audio}" class="mt-2"></audio>`
+                                                      : "";
+                                                    let image = "";
+                                                    if (
+                                                      item.question_category ===
+                                                        "reading" &&
+                                                      q.source_image
+                                                    ) {
+                                                      image = `<img src="source_image/${q.source_image.split("/").pop()}" alt="Source Image" class="mt-2 w-full rounded shadow object-contain" />`;
                                                     }
-                    const trueAnswer = typeof q.true_answer === 'number' ? q.true_answer : null;
-                    return `
+                                                    const trueAnswer =
+                                                      typeof q.true_answer ===
+                                                      "number"
+                                                        ? q.true_answer
+                                                        : null;
+                                                    return `
                                                         <div class="mb-2 p-2 rounded border border-gray-200 bg-gray-50">
                                                             <div class="font-medium text-indigo-700">Q${idx + 1}: ${qText}</div>
                                                             ${audio}
                                                             ${image}
                                                             <ul class="list-decimal ml-6 mt-1">
-                                                                ${answers.map((ans, i) => `<li${trueAnswer === i ? ' class=\"font-bold text-green-700\"' : ''}>${ans}</li>`).join('')}
+                                                                ${answers.map((ans, i) => `<li${trueAnswer === i ? ' class=\"font-bold text-green-700\"' : ""}>${ans}</li>`).join("")}
                                                             </ul>
-                                                            ${trueAnswer !== null ? `<div class=\"mt-1 text-xs text-green-700\">Kunci Jawaban: ${answers[trueAnswer] || '-'}</div>` : ''}
+                                                            ${trueAnswer !== null ? `<div class=\"mt-1 text-xs text-green-700\">Kunci Jawaban: ${answers[trueAnswer] || "-"}</div>` : ""}
                                                         </div>
                                                     `;
-                }).join('')}
+                                                  })
+                                                  .join("")}
                                             </div>
                                         </td>
                                     </tr>
                                     `;
-            }).join('')}
+                                  })
+                                  .join("")}
                             </tbody>
                         </table>
                     </div>
                 </div>
             `;
-            container.innerHTML = tableHTML;
-        }
+        container.innerHTML = tableHTML;
+      }
 
-        function getLevelColor(level) {
-            switch (level.toLowerCase()) {
-                case 'listening':
-                    return 'bg-blue-100 text-blue-800';
-                case 'reading':
-                    return 'bg-green-100 text-green-800';
-                case 'structure':
-                    return 'bg-yellow-100 text-yellow-800';
-                default:
-                    return 'bg-gray-100 text-gray-800';
-            }
+      function getLevelColor(level) {
+        switch (level.toLowerCase()) {
+          case "listening":
+            return "bg-blue-100 text-blue-800";
+          case "reading":
+            return "bg-green-100 text-green-800";
+          case "structure":
+            return "bg-yellow-100 text-yellow-800";
+          default:
+            return "bg-gray-100 text-gray-800";
         }
+      }
 
-        function updateDataCount() {
-            document.getElementById('dataCount').textContent = `${filteredData.length} of ${teflData.length} items`;
-        }
+      function updateDataCount() {
+        document.getElementById("dataCount").textContent =
+          `${filteredData.length} of ${teflData.length} items`;
+      }
 
-        function hideLoading() {
-            document.getElementById('loading').style.display = 'none';
-        }
+      function hideLoading() {
+        document.getElementById("loading").style.display = "none";
+      }
 
-        function showNoData() {
-            document.getElementById('noData').classList.remove('hidden');
-            document.getElementById('dataContainer').innerHTML = '';
-        }
+      function showNoData() {
+        document.getElementById("noData").classList.remove("hidden");
+        document.getElementById("dataContainer").innerHTML = "";
+      }
 
-        function hideNoData() {
-            document.getElementById('noData').classList.add('hidden');
-        }
+      function hideNoData() {
+        document.getElementById("noData").classList.add("hidden");
+      }
     </script>
-</body>
-
+  </body>
 </html>
