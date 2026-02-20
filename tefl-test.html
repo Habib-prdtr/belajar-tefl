@@ -1,434 +1,650 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TEFL Test Interface</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .test-section {
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            background: white;
-        }
+      .test-section {
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        background: white;
+      }
 
-        .test-section.active {
-            border-color: #3b82f6;
-            background: #f8fafc;
-        }
+      .test-section.active {
+        border-color: #3b82f6;
+        background: #f8fafc;
+      }
 
-        .question-item {
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
+      .question-item {
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+      }
 
-        .answer-option {
-            display: block;
-            padding: 8px 12px;
-            margin: 5px 0;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+      .answer-option {
+        display: block;
+        padding: 8px 12px;
+        margin: 5px 0;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
 
-        .answer-option:hover {
-            background: #f3f4f6;
-        }
+      .answer-option:hover {
+        background: #f3f4f6;
+      }
 
-        .answer-option input[type="radio"] {
-            margin-right: 8px;
-        }
+      .answer-option input[type="radio"] {
+        margin-right: 8px;
+      }
 
-        .timer {
-            font-family: 'Courier New', monospace;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #3b82f6;
-        }
+      .timer {
+        font-family: "Courier New", monospace;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #3b82f6;
+      }
 
-        .section-complete {
-            background: #dcfce7 !important;
-            border-color: #16a34a !important;
-        }
+      .section-complete {
+        background: #dcfce7 !important;
+        border-color: #16a34a !important;
+      }
 
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-        }
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+      }
 
-        .modal.show {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+      .modal.show {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
+      .number-grid {
+        position: fixed;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: white;
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+        width: 200px;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+
+      .number-grid h3 {
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #374151;
+      }
+
+      .number-button {
+        width: 32px;
+        height: 32px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        background: white;
+        color: #374151;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .number-button:hover {
+        background: #f3f4f6;
+        border-color: #9ca3af;
+      }
+
+      .number-button.answered {
+        background: #10b981;
+        color: white;
+        border-color: #10b981;
+      }
+
+      .number-button.current {
+        background: #3b82f6;
+        color: white;
+        border-color: #3b82f6;
+      }
+
+      .submit-button-sidebar {
+        width: 100%;
+        background: #3b82f6;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 15px;
+        transition: background 0.2s;
+      }
+
+      .submit-button-sidebar:hover {
+        background: #2563eb;
+      }
+
+      .submit-button-sidebar:disabled {
+        background: #9ca3af;
+        cursor: not-allowed;
+      }
+
+      .audio-container {
+        background: linear-gradient(135deg, #ebf8ff 0%, #dbeafe 100%);
+        border: 2px solid #93c5fd;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+
+      .audio-container audio {
+        width: 100%;
+        height: 40px;
+        border-radius: 8px;
+      }
+
+      .audio-container audio::-webkit-media-controls-panel {
+        background-color: #f8fafc;
+        border-radius: 8px;
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 1024px) {
         .number-grid {
-            position: fixed;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: white;
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            z-index: 100;
-            width: 200px;
-            max-height: 80vh;
-            overflow-y: auto;
+          position: fixed;
+          right: -100%;
+          top: 0;
+          bottom: 0;
+          transform: none;
+          width: 280px;
+          height: 100%;
+          max-height: 100vh;
+          border-radius: 0;
+          transition: right 0.3s ease-in-out;
+          box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
         }
 
-        .number-grid h3 {
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #374151;
+        .number-grid.show {
+          right: 0;
         }
 
-        .number-button {
-            width: 32px;
-            height: 32px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            background: white;
-            color: #374151;
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        main {
+          padding-right: 0 !important;
         }
 
-        .number-button:hover {
-            background: #f3f4f6;
-            border-color: #9ca3af;
+        .container {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .timer {
+          font-size: 1rem;
         }
 
-        .number-button.answered {
-            background: #10b981;
-            color: white;
-            border-color: #10b981;
+        h1 {
+          font-size: 1.25rem !important;
         }
 
-        .number-button.current {
-            background: #3b82f6;
-            color: white;
-            border-color: #3b82f6;
+        .tabs-container {
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
         }
 
-        .submit-button-sidebar {
-            width: 100%;
-            background: #3b82f6;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: background 0.2s;
+        .tabs-container .flex {
+          min-width: max-content;
         }
 
-        .submit-button-sidebar:hover {
-            background: #2563eb;
+        .test-section {
+          padding: 15px;
         }
+      }
 
-        .submit-button-sidebar:disabled {
-            background: #9ca3af;
-            cursor: not-allowed;
-        }
+      .grid-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 90;
+      }
 
-        .audio-container {
-            background: linear-gradient(135deg, #ebf8ff 0%, #dbeafe 100%);
-            border: 2px solid #93c5fd;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 16px;
-        }
-
-        .audio-container audio {
-            width: 100%;
-            height: 40px;
-            border-radius: 8px;
-        }
-
-        .audio-container audio::-webkit-media-controls-panel {
-            background-color: #f8fafc;
-            border-radius: 8px;
-        }
+      .grid-overlay.show {
+        display: block;
+      }
     </style>
-</head>
+  </head>
 
-<body class="bg-gray-100 min-h-screen">
+  <body class="bg-gray-100 min-h-screen">
     <!-- Header -->
     <header class="bg-white shadow-md sticky top-0 z-50">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                        <span class="text-white font-bold text-lg">T</span>
-                    </div>
-                    <h1 class="text-2xl font-bold text-gray-800">TEFL Test Interface</h1>
-                </div>
-                <div id="timer" class="timer">00:00:00</div>
+      <div class="container mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-2 md:space-x-3">
+            <div
+              class="w-8 h-8 md:w-10 md:h-10 bg-blue-600 rounded-lg flex items-center justify-center"
+            >
+              <span class="text-white font-bold text-sm md:text-lg">T</span>
             </div>
+            <h1 class="text-lg md:text-2xl font-bold text-gray-800 truncate">
+              TEFL Test
+            </h1>
+          </div>
+          <div class="flex items-center space-x-4">
+            <div id="timer" class="timer text-sm md:text-base">00:00:00</div>
+            <button
+              id="toggleGridBtn"
+              class="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+              title="Navigasi Soal"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16m-7 6h7"
+                ></path>
+              </svg>
+            </button>
+          </div>
         </div>
+      </div>
     </header>
 
     <!-- Navigation Tabs -->
-    <div class="bg-white border-b">
-        <div class="container mx-auto px-6">
-            <div class="flex space-x-8">
-                <button id="listeningTab" class="py-4 px-2 border-b-2 border-blue-600 text-blue-600 font-medium">
-                    LISTENING
-                    <span id="listeningProgress" class="ml-2 text-sm bg-blue-100 px-2 py-1 rounded">0/0</span>
-                </button>
-                <button id="readingTab" class="py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700">
-                    READING
-                    <span id="readingProgress" class="ml-2 text-sm bg-gray-100 px-2 py-1 rounded">0/0</span>
-                </button>
-                <button id="structureTab" class="py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700">
-                    STRUCTURE
-                    <span id="structureProgress" class="ml-2 text-sm bg-gray-100 px-2 py-1 rounded">0/0</span>
-                </button>
-            </div>
+    <div class="bg-white border-b sticky top-16 z-40">
+      <div class="container mx-auto px-6 tabs-container">
+        <div class="flex space-x-4 md:space-x-8">
+          <button
+            id="listeningTab"
+            class="py-3 md:py-4 px-2 border-b-2 border-blue-600 text-blue-600 font-medium whitespace-nowrap text-sm md:text-base"
+          >
+            LISTENING
+            <span
+              id="listeningProgress"
+              class="ml-1 md:ml-2 text-xs md:text-sm bg-blue-100 px-2 py-1 rounded"
+              >0/0</span
+            >
+          </button>
+          <button
+            id="readingTab"
+            class="py-3 md:py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 whitespace-nowrap text-sm md:text-base"
+          >
+            READING
+            <span
+              id="readingProgress"
+              class="ml-1 md:ml-2 text-xs md:text-sm bg-gray-100 px-2 py-1 rounded"
+              >0/0</span
+            >
+          </button>
+          <button
+            id="structureTab"
+            class="py-3 md:py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 whitespace-nowrap text-sm md:text-base"
+          >
+            STRUCTURE
+            <span
+              id="structureProgress"
+              class="ml-1 md:ml-2 text-xs md:text-sm bg-gray-100 px-2 py-1 rounded"
+              >0/0</span
+            >
+          </button>
         </div>
+      </div>
     </div>
 
     <!-- Main Content -->
     <main class="container mx-auto px-6 py-8">
-        <!-- Loading -->
-        <div id="loading" class="text-center py-12">
-            <div class="animate-spin w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
-            <span class="text-gray-600">Memuat soal test...</span>
+      <!-- Loading -->
+      <div id="loading" class="text-center py-12">
+        <div
+          class="animate-spin w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"
+        ></div>
+        <span class="text-gray-600">Memuat soal test...</span>
+      </div>
+
+      <!-- Test Sections -->
+      <div id="testContainer" class="hidden">
+        <!-- Listening Section -->
+        <div id="listeningSection" class="test-section active">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">LISTENING</h2>
+            <div class="text-right">
+              <div class="text-sm text-gray-600">
+                Waktu:
+                <span id="listeningTime" class="timer"
+                  >20:25:00 - 21:00:00</span
+                >
+              </div>
+              <div class="text-sm text-gray-600 mt-1">
+                Sisa waktu:
+                <span id="listeningTimer" class="timer">0:09:17</span>
+              </div>
+            </div>
+          </div>
+          <div id="listeningQuestions"></div>
+          <button
+            id="submitListening"
+            class="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          >
+            Submit Jawaban Listening
+          </button>
         </div>
 
-        <!-- Test Sections -->
-        <div id="testContainer" class="hidden">
-            <!-- Listening Section -->
-            <div id="listeningSection" class="test-section active">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-bold text-gray-800">LISTENING</h2>
-                    <div class="text-right">
-                        <div class="text-sm text-gray-600">Waktu: <span id="listeningTime" class="timer">20:25:00 - 21:00:00</span></div>
-                        <div class="text-sm text-gray-600 mt-1">Sisa waktu: <span id="listeningTimer" class="timer">0:09:17</span></div>
-                    </div>
-                </div>
-                <div id="listeningQuestions"></div>
-                <button id="submitListening" class="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed">
-                    Submit Jawaban Listening
-                </button>
+        <!-- Reading Section -->
+        <div id="readingSection" class="test-section hidden">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">READING</h2>
+            <div class="text-right">
+              <div class="text-sm text-gray-600">
+                Waktu: <span class="timer">21:00:00 - 21:25:00</span>
+              </div>
             </div>
-
-            <!-- Reading Section -->
-            <div id="readingSection" class="test-section hidden">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-bold text-gray-800">READING</h2>
-                    <div class="text-right">
-                        <div class="text-sm text-gray-600">Waktu: <span class="timer">21:00:00 - 21:25:00</span></div>
-                    </div>
-                </div>
-                <div id="readingQuestions"></div>
-                <button id="submitReading" class="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed">
-                    Submit Jawaban Reading
-                </button>
-            </div>
-
-            <!-- Structure Section -->
-            <div id="structureSection" class="test-section hidden">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-bold text-gray-800">STRUCTURE</h2>
-                    <div class="text-right">
-                        <div class="text-sm text-gray-600">Waktu: <span class="timer">21:00:00 - 21:25:00</span></div>
-                    </div>
-                </div>
-                <div id="structureQuestions"></div>
-                <button id="submitStructure" class="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed">
-                    Submit Jawaban Structure
-                </button>
-            </div>
-
-            <!-- Final Submit -->
-            <div id="finalSubmitSection" class="text-center mt-8 hidden">
-                <button id="submitFinal" class="px-8 py-4 bg-green-600 text-white text-lg font-bold rounded-lg hover:bg-green-700">
-                    Submit Jawaban Final
-                </button>
-            </div>
+          </div>
+          <div id="readingQuestions"></div>
+          <button
+            id="submitReading"
+            class="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          >
+            Submit Jawaban Reading
+          </button>
         </div>
 
-        <!-- Number Grid (Question Navigator) -->
-        <div id="numberGrid" class="number-grid">
-            <h3 id="sidebarTitle">LISTENING</h3>
-            <div id="sidebarTime" class="text-xs text-center text-gray-600 mb-3">20:25:00 - 21:00:00</div>
-            <div id="sidebarTimer" class="text-sm text-center font-mono text-blue-600 mb-4">0:09:17</div>
-            <div id="numbersContainer" class="grid grid-cols-5 gap-2 mb-4">
-                <!-- Numbers will be populated here -->
+        <!-- Structure Section -->
+        <div id="structureSection" class="test-section hidden">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">STRUCTURE</h2>
+            <div class="text-right">
+              <div class="text-sm text-gray-600">
+                Waktu: <span class="timer">21:00:00 - 21:25:00</span>
+              </div>
             </div>
-            <button id="sidebarSubmit" class="submit-button-sidebar">
-                Submit Jawaban
-            </button>
+          </div>
+          <div id="structureQuestions"></div>
+          <button
+            id="submitStructure"
+            class="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          >
+            Submit Jawaban Structure
+          </button>
         </div>
+
+        <!-- Final Submit -->
+        <div id="finalSubmitSection" class="text-center mt-8 hidden">
+          <button
+            id="submitFinal"
+            class="px-8 py-4 bg-green-600 text-white text-lg font-bold rounded-lg hover:bg-green-700"
+          >
+            Submit Jawaban Final
+          </button>
+        </div>
+      </div>
+
+      <!-- Number Grid (Question Navigator) -->
+      <div id="numberGrid" class="number-grid">
+        <h3 id="sidebarTitle">LISTENING</h3>
+        <div id="sidebarTime" class="text-xs text-center text-gray-600 mb-3">
+          20:25:00 - 21:00:00
+        </div>
+        <div
+          id="sidebarTimer"
+          class="text-sm text-center font-mono text-blue-600 mb-4"
+        >
+          0:09:17
+        </div>
+        <div id="numbersContainer" class="grid grid-cols-5 gap-2 mb-4">
+          <!-- Numbers will be populated here -->
+        </div>
+        <button id="sidebarSubmit" class="submit-button-sidebar">
+          Submit Jawaban
+        </button>
+      </div>
     </main>
 
+    <!-- Overlay for mobile navigation -->
+    <div
+      id="gridOverlay"
+      class="grid-overlay"
+      onclick="toggleMobileGrid()"
+    ></div>
+
     <!-- Result Modal -->
-    <div id="resultModal" class="modal" onclick="closeModalOnOutsideClick(event)">
-        <div class="bg-white rounded-lg p-8 max-w-2xl w-full mx-4" onclick="event.stopPropagation()">
-            <h2 class="text-2xl font-bold text-center mb-6">HASIL TEST TEFL</h2>
-            <div id="resultContent">
-                <!-- Results will be populated here -->
-            </div>
-            <div class="text-center mt-6">
-                <button onclick="location.reload()" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                    Ulangi Test
-                </button>
-                <button onclick="closeModal()" class="ml-3 px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
-                    Tutup
-                </button>
-            </div>
+    <div
+      id="resultModal"
+      class="modal"
+      onclick="closeModalOnOutsideClick(event)"
+    >
+      <div
+        class="bg-white rounded-lg p-8 max-w-2xl w-full mx-4"
+        onclick="event.stopPropagation()"
+      >
+        <h2 class="text-2xl font-bold text-center mb-6">HASIL TEST TEFL</h2>
+        <div id="resultContent">
+          <!-- Results will be populated here -->
         </div>
+        <div class="text-center mt-6">
+          <button
+            onclick="location.reload()"
+            class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Ulangi Test
+          </button>
+          <button
+            onclick="closeModal()"
+            class="ml-3 px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+          >
+            Tutup
+          </button>
+        </div>
+      </div>
     </div>
 
     <script>
-        let teflData = [];
-        let testQuestions = {
-            listening: [],
-            reading: [],
-            structure: []
-        };
-        let userAnswers = {
-            listening: {},
-            reading: {},
-            structure: {}
-        };
-        let sectionStatus = {
-            listening: false,
-            reading: false,
-            structure: false
-        };
-        let currentSection = 'listening';
-        let currentQuestionIndex = 0;
-        let startTime = new Date();
+      let teflData = [];
+      let testQuestions = {
+        listening: [],
+        reading: [],
+        structure: [],
+      };
+      let userAnswers = {
+        listening: {},
+        reading: {},
+        structure: {},
+      };
+      let sectionStatus = {
+        listening: false,
+        reading: false,
+        structure: false,
+      };
+      let currentSection = "listening";
+      let currentQuestionIndex = 0;
+      let startTime = new Date();
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function () {
-            loadData();
-            setupEventListeners();
-            startTimer();
-        });
+      // Initialize
+      document.addEventListener("DOMContentLoaded", function () {
+        loadData();
+        setupEventListeners();
+        startTimer();
+      });
 
-        function setupEventListeners() {
-            // Tab navigation
-            document.getElementById('listeningTab').addEventListener('click', () => switchSection('listening'));
-            document.getElementById('readingTab').addEventListener('click', () => switchSection('reading'));
-            document.getElementById('structureTab').addEventListener('click', () => switchSection('structure'));
+      function setupEventListeners() {
+        // Tab navigation
+        document
+          .getElementById("listeningTab")
+          .addEventListener("click", () => switchSection("listening"));
+        document
+          .getElementById("readingTab")
+          .addEventListener("click", () => switchSection("reading"));
+        document
+          .getElementById("structureTab")
+          .addEventListener("click", () => switchSection("structure"));
 
-            // Submit buttons
-            document.getElementById('submitListening').addEventListener('click', () => submitSection('listening'));
-            document.getElementById('submitReading').addEventListener('click', () => submitSection('reading'));
-            document.getElementById('submitStructure').addEventListener('click', () => submitSection('structure'));
-            document.getElementById('submitFinal').addEventListener('click', submitFinalTest);
-            
-            // Sidebar submit button
-            document.getElementById('sidebarSubmit').addEventListener('click', () => submitSection(currentSection));
+        // Submit buttons
+        document
+          .getElementById("submitListening")
+          .addEventListener("click", () => submitSection("listening"));
+        document
+          .getElementById("submitReading")
+          .addEventListener("click", () => submitSection("reading"));
+        document
+          .getElementById("submitStructure")
+          .addEventListener("click", () => submitSection("structure"));
+        document
+          .getElementById("submitFinal")
+          .addEventListener("click", submitFinalTest);
+
+        // Sidebar submit button
+        document
+          .getElementById("sidebarSubmit")
+          .addEventListener("click", () => submitSection(currentSection));
+
+        // Mobile toggle
+        document
+          .getElementById("toggleGridBtn")
+          .addEventListener("click", toggleMobileGrid);
+      }
+
+      function toggleMobileGrid() {
+        const grid = document.getElementById("numberGrid");
+        const overlay = document.getElementById("gridOverlay");
+        grid.classList.toggle("show");
+        overlay.classList.toggle("show");
+
+        // Prevent body scroll when menu is open
+        if (grid.classList.contains("show")) {
+          document.body.style.overflow = "hidden";
+        } else {
+          document.body.style.overflow = "";
         }
+      }
 
-        async function loadData() {
-            try {
-                const response = await fetch('tefl.json');
-                if (response.ok) {
-                    const jsonData = await response.json();
-                    if (jsonData && jsonData.props) {
-                        // Ekstrak data dari JSON
-                        const listening = Array.isArray(jsonData.props.listening) ? jsonData.props.listening : [];
-                        const reading = Array.isArray(jsonData.props.reading) ? jsonData.props.reading : [];
-                        const structure = Array.isArray(jsonData.props.structure) ? jsonData.props.structure : [];
+      async function loadData() {
+        try {
+          const response = await fetch("tefl.json");
+          if (response.ok) {
+            const jsonData = await response.json();
+            if (jsonData && jsonData.props) {
+              // Ekstrak data dari JSON
+              const listening = Array.isArray(jsonData.props.listening)
+                ? jsonData.props.listening
+                : [];
+              const reading = Array.isArray(jsonData.props.reading)
+                ? jsonData.props.reading
+                : [];
+              const structure = Array.isArray(jsonData.props.structure)
+                ? jsonData.props.structure
+                : [];
 
-                        // Ambil soal dari modul acak setiap kategori
-                        testQuestions.listening = getRandomQuestions(listening, 'listening');
-                        testQuestions.reading = getRandomQuestions(reading, 'reading');
-                        testQuestions.structure = getRandomQuestions(structure, 'structure');
+              // Ambil soal dari modul acak setiap kategori
+              testQuestions.listening = getRandomQuestions(
+                listening,
+                "listening",
+              );
+              testQuestions.reading = getRandomQuestions(reading, "reading");
+              testQuestions.structure = getRandomQuestions(
+                structure,
+                "structure",
+              );
 
-                        // Update tampilan dengan info modul yang dipilih
-                        updateModuleInfo();
-                        renderQuestions();
-                        updateProgress();
-                        renderNumberGrid();
-                        hideLoading();
-                    }
-                } else {
-                    throw new Error('File tidak ditemukan');
-                }
-            } catch (error) {
-                console.error('Error loading data:', error);
-                alert('Gagal memuat data test. Pastikan file tefl.json tersedia.');
-                hideLoading();
+              // Update tampilan dengan info modul yang dipilih
+              updateModuleInfo();
+              renderQuestions();
+              updateProgress();
+              renderNumberGrid();
+              hideLoading();
             }
+          } else {
+            throw new Error("File tidak ditemukan");
+          }
+        } catch (error) {
+          console.error("Error loading data:", error);
+          alert("Gagal memuat data test. Pastikan file tefl.json tersedia.");
+          hideLoading();
+        }
+      }
+
+      function getRandomQuestions(modules, category) {
+        // Filter modul yang memiliki soal
+        const validModules = modules.filter(
+          (module) =>
+            Array.isArray(module.questions) && module.questions.length > 0,
+        );
+
+        if (validModules.length === 0) {
+          return [];
         }
 
-        function getRandomQuestions(modules, category) {
-            // Filter modul yang memiliki soal
-            const validModules = modules.filter(module => 
-                Array.isArray(module.questions) && module.questions.length > 0
-            );
+        // Pilih satu modul secara acak
+        const randomModule =
+          validModules[Math.floor(Math.random() * validModules.length)];
 
-            if (validModules.length === 0) {
-                return [];
-            }
+        // Ambil semua soal dari modul terpilih, tetap berurutan
+        const questions = randomModule.questions.map((question) => ({
+          ...question,
+          moduleId: randomModule.id,
+          moduleName: randomModule.modul,
+          category: category,
+        }));
 
-            // Pilih satu modul secara acak
-            const randomModule = validModules[Math.floor(Math.random() * validModules.length)];
-            
-            // Ambil semua soal dari modul terpilih, tetap berurutan
-            const questions = randomModule.questions.map(question => ({
-                ...question,
-                moduleId: randomModule.id,
-                moduleName: randomModule.modul,
-                category: category
-            }));
+        // Batasi maksimal 50 soal jika terlalu banyak
+        const maxQuestions = Math.min(50, questions.length);
+        return questions.slice(0, maxQuestions);
+      }
 
-            // Batasi maksimal 50 soal jika terlalu banyak
-            const maxQuestions = Math.min(50, questions.length);
-            return questions.slice(0, maxQuestions);
+      function renderQuestions() {
+        renderSectionQuestions("listening");
+        renderSectionQuestions("reading");
+        renderSectionQuestions("structure");
+        showCurrentQuestion();
+      }
+
+      function renderSectionQuestions(section) {
+        const container = document.getElementById(`${section}Questions`);
+        const questions = testQuestions[section];
+
+        if (questions.length === 0) {
+          container.innerHTML =
+            '<p class="text-gray-500">Tidak ada soal tersedia untuk bagian ini.</p>';
+          return;
         }
 
-        function renderQuestions() {
-            renderSectionQuestions('listening');
-            renderSectionQuestions('reading');
-            renderSectionQuestions('structure');
-            showCurrentQuestion();
-        }
+        const questionsHTML = questions
+          .map((question, index) => {
+            const questionNumber = index + 1;
+            const answers = Array.isArray(question.answer)
+              ? question.answer
+              : [];
 
-        function renderSectionQuestions(section) {
-            const container = document.getElementById(`${section}Questions`);
-            const questions = testQuestions[section];
-
-            if (questions.length === 0) {
-                container.innerHTML = '<p class="text-gray-500">Tidak ada soal tersedia untuk bagian ini.</p>';
-                return;
-            }
-
-            const questionsHTML = questions.map((question, index) => {
-                const questionNumber = index + 1;
-                const answers = Array.isArray(question.answer) ? question.answer : [];
-                
-                let audioHTML = '';
-                if (section === 'listening' && question.source_audio) {
-                    audioHTML = `
+            let audioHTML = "";
+            if (section === "listening" && question.source_audio) {
+              audioHTML = `
                         <div class="audio-container">
                             <div class="flex items-center mb-3">
                                 <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -448,293 +664,345 @@
                             </div>
                         </div>
                     `;
-                }
+            }
 
-                let imageHTML = '';
-                if (section === 'reading' && question.source_image) {
-                    const imageName = question.source_image.split('/').pop();
-                    imageHTML = `
+            let imageHTML = "";
+            if (section === "reading" && question.source_image) {
+              const imageName = question.source_image.split("/").pop();
+              imageHTML = `
                         <div class="mb-4">
                             <img src="source_image/${imageName}" alt="Gambar soal" class="max-w-full h-auto rounded shadow">
                         </div>
                     `;
-                }
+            }
 
-                return `
-                    <div class="question-item" id="question_${section}_${index}" ${index === 0 && section === currentSection ? '' : 'style="display: none;"'}>
+            return `
+                    <div class="question-item" id="question_${section}_${index}" ${index === 0 && section === currentSection ? "" : 'style="display: none;"'}>
                         <div class="flex items-start justify-between mb-3">
                             <h4 class="font-medium text-lg">Soal ${questionNumber}</h4>
                         </div>
                         ${audioHTML}
                         ${imageHTML}
-                        <p class="mb-4 text-gray-800">${question.question || 'Pertanyaan tidak tersedia'}</p>
+                        <p class="mb-4 text-gray-800">${question.question || "Pertanyaan tidak tersedia"}</p>
                         <div class="space-y-2">
-                            ${answers.map((answer, answerIndex) => `
+                            ${answers
+                              .map(
+                                (answer, answerIndex) => `
                                 <label class="answer-option">
                                     <input type="radio" name="${section}_q${questionNumber}" value="${answerIndex}" 
                                            onchange="saveAnswer('${section}', ${index}, ${answerIndex})">
                                     ${String.fromCharCode(65 + answerIndex)}. ${answer}
                                 </label>
-                            `).join('')}
+                            `,
+                              )
+                              .join("")}
                         </div>
                     </div>
                 `;
-            }).join('');
+          })
+          .join("");
 
-            container.innerHTML = questionsHTML;
+        container.innerHTML = questionsHTML;
+      }
+
+      function saveAnswer(section, questionIndex, answerIndex) {
+        userAnswers[section][questionIndex] = answerIndex;
+        updateProgress();
+        updateNumberGrid();
+      }
+
+      function updateModuleInfo() {
+        // Update info modul di header setiap section
+        const listeningModule =
+          testQuestions.listening.length > 0
+            ? testQuestions.listening[0].moduleName
+            : "Tidak ada modul";
+        const readingModule =
+          testQuestions.reading.length > 0
+            ? testQuestions.reading[0].moduleName
+            : "Tidak ada modul";
+        const structureModule =
+          testQuestions.structure.length > 0
+            ? testQuestions.structure[0].moduleName
+            : "Tidak ada modul";
+
+        const listeningCount = testQuestions.listening.length;
+        const readingCount = testQuestions.reading.length;
+        const structureCount = testQuestions.structure.length;
+
+        // Update header listening
+        const listeningHeader = document.querySelector("#listeningSection h2");
+        if (listeningHeader) {
+          listeningHeader.innerHTML = `LISTENING <span class="text-sm text-blue-600 font-normal">(Modul: ${listeningModule} - ${listeningCount} soal)</span>`;
         }
 
-        function saveAnswer(section, questionIndex, answerIndex) {
-            userAnswers[section][questionIndex] = answerIndex;
-            updateProgress();
-            updateNumberGrid();
+        // Update header reading
+        const readingHeader = document.querySelector("#readingSection h2");
+        if (readingHeader) {
+          readingHeader.innerHTML = `READING <span class="text-sm text-green-600 font-normal">(Modul: ${readingModule} - ${readingCount} soal)</span>`;
         }
 
-        function updateModuleInfo() {
-            // Update info modul di header setiap section
-            const listeningModule = testQuestions.listening.length > 0 ? testQuestions.listening[0].moduleName : 'Tidak ada modul';
-            const readingModule = testQuestions.reading.length > 0 ? testQuestions.reading[0].moduleName : 'Tidak ada modul';
-            const structureModule = testQuestions.structure.length > 0 ? testQuestions.structure[0].moduleName : 'Tidak ada modul';
+        // Update header structure
+        const structureHeader = document.querySelector("#structureSection h2");
+        if (structureHeader) {
+          structureHeader.innerHTML = `STRUCTURE <span class="text-sm text-purple-600 font-normal">(Modul: ${structureModule} - ${structureCount} soal)</span>`;
+        }
+      }
 
-            const listeningCount = testQuestions.listening.length;
-            const readingCount = testQuestions.reading.length;
-            const structureCount = testQuestions.structure.length;
+      function updateProgress() {
+        ["listening", "reading", "structure"].forEach((section) => {
+          const answered = Object.keys(userAnswers[section]).length;
+          const total = testQuestions[section].length;
+          document.getElementById(`${section}Progress`).textContent =
+            `${answered}/${total}`;
+        });
+      }
 
-            // Update header listening
-            const listeningHeader = document.querySelector('#listeningSection h2');
-            if (listeningHeader) {
-                listeningHeader.innerHTML = `LISTENING <span class="text-sm text-blue-600 font-normal">(Modul: ${listeningModule} - ${listeningCount} soal)</span>`;
-            }
+      function switchSection(section) {
+        // Hide all sections
+        document.querySelectorAll(".test-section").forEach((el) => {
+          el.classList.add("hidden");
+          el.classList.remove("active");
+        });
 
-            // Update header reading  
-            const readingHeader = document.querySelector('#readingSection h2');
-            if (readingHeader) {
-                readingHeader.innerHTML = `READING <span class="text-sm text-green-600 font-normal">(Modul: ${readingModule} - ${readingCount} soal)</span>`;
-            }
+        // Show selected section
+        document.getElementById(`${section}Section`).classList.remove("hidden");
+        document.getElementById(`${section}Section`).classList.add("active");
 
-            // Update header structure
-            const structureHeader = document.querySelector('#structureSection h2');
-            if (structureHeader) {
-                structureHeader.innerHTML = `STRUCTURE <span class="text-sm text-purple-600 font-normal">(Modul: ${structureModule} - ${structureCount} soal)</span>`;
-            }
+        // Update tabs
+        document.querySelectorAll('[id$="Tab"]').forEach((tab) => {
+          tab.className =
+            "py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700";
+        });
+        document.getElementById(`${section}Tab`).className =
+          "py-4 px-2 border-b-2 border-blue-600 text-blue-600 font-medium";
+
+        currentSection = section;
+        currentQuestionIndex = 0;
+        updateSidebar();
+        showCurrentQuestion();
+      }
+
+      function renderNumberGrid() {
+        const container = document.getElementById("numbersContainer");
+        const questions = testQuestions[currentSection];
+
+        if (questions.length === 0) {
+          container.innerHTML =
+            '<p class="text-sm text-gray-500">Tidak ada soal</p>';
+          return;
         }
 
-        function updateProgress() {
-            ['listening', 'reading', 'structure'].forEach(section => {
-                const answered = Object.keys(userAnswers[section]).length;
-                const total = testQuestions[section].length;
-                document.getElementById(`${section}Progress`).textContent = `${answered}/${total}`;
-            });
+        const numbersHTML = questions
+          .map((_, index) => {
+            const number = index + 1;
+            const isAnswered = userAnswers[currentSection][index] !== undefined;
+            const isCurrent = index === currentQuestionIndex;
+
+            let className = "number-button";
+            if (isCurrent) className += " current";
+            else if (isAnswered) className += " answered";
+
+            return `<button class="${className}" onclick="goToQuestion(${index})">${number}</button>`;
+          })
+          .join("");
+
+        container.innerHTML = numbersHTML;
+      }
+
+      function updateNumberGrid() {
+        renderNumberGrid();
+      }
+
+      function updateSidebar() {
+        const sectionNames = {
+          listening: "LISTENING",
+          reading: "READING",
+          structure: "STRUCTURE",
+        };
+
+        const timeSlots = {
+          listening: "20:25:00 - 21:00:00",
+          reading: "21:00:00 - 21:25:00",
+          structure: "21:00:00 - 21:25:00",
+        };
+
+        document.getElementById("sidebarTitle").textContent =
+          sectionNames[currentSection];
+        document.getElementById("sidebarTime").textContent =
+          timeSlots[currentSection];
+
+        const button = document.getElementById("sidebarSubmit");
+        const sectionCompleted = sectionStatus[currentSection];
+
+        if (sectionCompleted) {
+          button.textContent = `${sectionNames[currentSection]} Submitted ✓`;
+          button.disabled = true;
+        } else {
+          button.textContent = "Submit Jawaban";
+          button.disabled = false;
         }
 
-        function switchSection(section) {
-            // Hide all sections
-            document.querySelectorAll('.test-section').forEach(el => {
-                el.classList.add('hidden');
-                el.classList.remove('active');
-            });
+        renderNumberGrid();
+      }
 
-            // Show selected section
-            document.getElementById(`${section}Section`).classList.remove('hidden');
-            document.getElementById(`${section}Section`).classList.add('active');
+      function goToQuestion(questionIndex) {
+        currentQuestionIndex = questionIndex;
+        showCurrentQuestion();
+        updateNumberGrid();
+      }
 
-            // Update tabs
-            document.querySelectorAll('[id$="Tab"]').forEach(tab => {
-                tab.className = 'py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700';
-            });
-            document.getElementById(`${section}Tab`).className = 'py-4 px-2 border-b-2 border-blue-600 text-blue-600 font-medium';
+      function showCurrentQuestion() {
+        // Hide all questions in current section
+        const allQuestions = document.querySelectorAll(
+          `#${currentSection}Questions .question-item`,
+        );
+        allQuestions.forEach((q) => (q.style.display = "none"));
 
-            currentSection = section;
-            currentQuestionIndex = 0;
-            updateSidebar();
-            showCurrentQuestion();
+        // Show current question
+        const currentQuestion = document.getElementById(
+          `question_${currentSection}_${currentQuestionIndex}`,
+        );
+        if (currentQuestion) {
+          currentQuestion.style.display = "block";
         }
 
-        function renderNumberGrid() {
-            const container = document.getElementById('numbersContainer');
-            const questions = testQuestions[currentSection];
-            
-            if (questions.length === 0) {
-                container.innerHTML = '<p class="text-sm text-gray-500">Tidak ada soal</p>';
-                return;
-            }
+        // Update navigation info
+        const totalQuestions = testQuestions[currentSection].length;
+        const sectionNames = {
+          listening: "LISTENING",
+          reading: "READING",
+          structure: "STRUCTURE",
+        };
 
-            const numbersHTML = questions.map((_, index) => {
-                const number = index + 1;
-                const isAnswered = userAnswers[currentSection][index] !== undefined;
-                const isCurrent = index === currentQuestionIndex;
-                
-                let className = 'number-button';
-                if (isCurrent) className += ' current';
-                else if (isAnswered) className += ' answered';
-                
-                return `<button class="${className}" onclick="goToQuestion(${index})">${number}</button>`;
-            }).join('');
+        const titleElement = document.getElementById("currentSectionTitle");
+        const infoElement = document.getElementById("currentQuestionInfo");
 
-            container.innerHTML = numbersHTML;
+        if (titleElement) {
+          titleElement.textContent = sectionNames[currentSection];
+        }
+        if (infoElement) {
+          infoElement.textContent = `Soal ${currentQuestionIndex + 1} dari ${totalQuestions}`;
         }
 
-        function updateNumberGrid() {
-            renderNumberGrid();
+        // Update navigation buttons
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+
+        if (prevBtn) {
+          prevBtn.disabled = currentQuestionIndex === 0;
+        }
+        if (nextBtn) {
+          nextBtn.disabled = currentQuestionIndex === totalQuestions - 1;
+        }
+      }
+
+      function goToPreviousQuestion() {
+        if (currentQuestionIndex > 0) {
+          currentQuestionIndex--;
+          showCurrentQuestion();
+          updateNumberGrid();
+        }
+      }
+
+      function goToNextQuestion() {
+        const totalQuestions = testQuestions[currentSection].length;
+        if (currentQuestionIndex < totalQuestions - 1) {
+          currentQuestionIndex++;
+          showCurrentQuestion();
+          updateNumberGrid();
+        }
+      }
+
+      function submitSection(section) {
+        const answeredCount = Object.keys(userAnswers[section]).length;
+        const totalCount = testQuestions[section].length;
+
+        if (answeredCount === 0) {
+          alert("Silakan jawab minimal satu soal sebelum submit.");
+          return;
         }
 
-        function updateSidebar() {
-            const sectionNames = {
-                listening: 'LISTENING',
-                reading: 'READING', 
-                structure: 'STRUCTURE'
-            };
-            
-            const timeSlots = {
-                listening: '20:25:00 - 21:00:00',
-                reading: '21:00:00 - 21:25:00',
-                structure: '21:00:00 - 21:25:00'
-            };
-
-            document.getElementById('sidebarTitle').textContent = sectionNames[currentSection];
-            document.getElementById('sidebarTime').textContent = timeSlots[currentSection];
-            
-            const button = document.getElementById('sidebarSubmit');
-            const sectionCompleted = sectionStatus[currentSection];
-            
-            if (sectionCompleted) {
-                button.textContent = `${sectionNames[currentSection]} Submitted ✓`;
-                button.disabled = true;
-            } else {
-                button.textContent = 'Submit Jawaban';
-                button.disabled = false;
-            }
-            
-            renderNumberGrid();
+        const confirmMsg = `Anda telah menjawab ${answeredCount} dari ${totalCount} soal ${section.toUpperCase()}. Yakin ingin submit?`;
+        if (!confirm(confirmMsg)) {
+          return;
         }
 
-        function goToQuestion(questionIndex) {
-            currentQuestionIndex = questionIndex;
-            showCurrentQuestion();
-            updateNumberGrid();
+        // Mark section as completed
+        sectionStatus[section] = true;
+        document
+          .getElementById(`${section}Section`)
+          .classList.add("section-complete");
+        document.getElementById(
+          `submit${section.charAt(0).toUpperCase() + section.slice(1)}`,
+        ).disabled = true;
+        document.getElementById(
+          `submit${section.charAt(0).toUpperCase() + section.slice(1)}`,
+        ).textContent = `${section.toUpperCase()} Submitted ✓`;
+
+        // Update sidebar
+        updateSidebar();
+
+        // Check if all sections are completed
+        if (
+          sectionStatus.listening &&
+          sectionStatus.reading &&
+          sectionStatus.structure
+        ) {
+          document
+            .getElementById("finalSubmitSection")
+            .classList.remove("hidden");
         }
 
-        function showCurrentQuestion() {
-            // Hide all questions in current section
-            const allQuestions = document.querySelectorAll(`#${currentSection}Questions .question-item`);
-            allQuestions.forEach(q => q.style.display = 'none');
-            
-            // Show current question
-            const currentQuestion = document.getElementById(`question_${currentSection}_${currentQuestionIndex}`);
-            if (currentQuestion) {
-                currentQuestion.style.display = 'block';
-            }
-            
-            // Update navigation info
-            const totalQuestions = testQuestions[currentSection].length;
-            const sectionNames = {
-                listening: 'LISTENING',
-                reading: 'READING', 
-                structure: 'STRUCTURE'
-            };
-            
-            const titleElement = document.getElementById('currentSectionTitle');
-            const infoElement = document.getElementById('currentQuestionInfo');
-            
-            if (titleElement) {
-                titleElement.textContent = sectionNames[currentSection];
-            }
-            if (infoElement) {
-                infoElement.textContent = `Soal ${currentQuestionIndex + 1} dari ${totalQuestions}`;
-            }
-            
-            // Update navigation buttons
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            
-            if (prevBtn) {
-                prevBtn.disabled = currentQuestionIndex === 0;
-            }
-            if (nextBtn) {
-                nextBtn.disabled = currentQuestionIndex === totalQuestions - 1;
-            }
+        alert(`Jawaban ${section.toUpperCase()} berhasil disubmit!`);
+      }
+
+      function submitFinalTest() {
+        // Check if all sections are completed
+        const allSectionsCompleted =
+          sectionStatus.listening &&
+          sectionStatus.reading &&
+          sectionStatus.structure;
+
+        if (!allSectionsCompleted) {
+          alert(
+            "Silakan submit semua bagian (Listening, Reading, Structure) terlebih dahulu sebelum melihat hasil final.",
+          );
+          return;
         }
 
-        function goToPreviousQuestion() {
-            if (currentQuestionIndex > 0) {
-                currentQuestionIndex--;
-                showCurrentQuestion();
-                updateNumberGrid();
-            }
+        if (!confirm("Yakin ingin menyelesaikan test dan melihat hasil?")) {
+          return;
         }
 
-        function goToNextQuestion() {
-            const totalQuestions = testQuestions[currentSection].length;
-            if (currentQuestionIndex < totalQuestions - 1) {
-                currentQuestionIndex++;
-                showCurrentQuestion();
-                updateNumberGrid();
-            }
-        }
+        calculateAndShowResults();
+      }
 
-        function submitSection(section) {
-            const answeredCount = Object.keys(userAnswers[section]).length;
-            const totalCount = testQuestions[section].length;
+      function calculateAndShowResults() {
+        console.log("Calculating results..."); // Debug log
 
-            if (answeredCount === 0) {
-                alert('Silakan jawab minimal satu soal sebelum submit.');
-                return;
-            }
+        const results = {
+          listening: calculateSectionScore("listening"),
+          reading: calculateSectionScore("reading"),
+          structure: calculateSectionScore("structure"),
+        };
 
-            const confirmMsg = `Anda telah menjawab ${answeredCount} dari ${totalCount} soal ${section.toUpperCase()}. Yakin ingin submit?`;
-            if (!confirm(confirmMsg)) {
-                return;
-            }
+        console.log("Results:", results); // Debug log
 
-            // Mark section as completed
-            sectionStatus[section] = true;
-            document.getElementById(`${section}Section`).classList.add('section-complete');
-            document.getElementById(`submit${section.charAt(0).toUpperCase() + section.slice(1)}`).disabled = true;
-            document.getElementById(`submit${section.charAt(0).toUpperCase() + section.slice(1)}`).textContent = `${section.toUpperCase()} Submitted ✓`;
+        const totalCorrect =
+          results.listening.correct +
+          results.reading.correct +
+          results.structure.correct;
+        const totalQuestions =
+          results.listening.total +
+          results.reading.total +
+          results.structure.total;
+        const totalScore =
+          totalQuestions > 0
+            ? Math.round((totalCorrect / totalQuestions) * 100)
+            : 0;
 
-            // Update sidebar
-            updateSidebar();
-
-            // Check if all sections are completed
-            if (sectionStatus.listening && sectionStatus.reading && sectionStatus.structure) {
-                document.getElementById('finalSubmitSection').classList.remove('hidden');
-            }
-
-            alert(`Jawaban ${section.toUpperCase()} berhasil disubmit!`);
-        }
-
-        function submitFinalTest() {
-            // Check if all sections are completed
-            const allSectionsCompleted = sectionStatus.listening && sectionStatus.reading && sectionStatus.structure;
-            
-            if (!allSectionsCompleted) {
-                alert('Silakan submit semua bagian (Listening, Reading, Structure) terlebih dahulu sebelum melihat hasil final.');
-                return;
-            }
-
-            if (!confirm('Yakin ingin menyelesaikan test dan melihat hasil?')) {
-                return;
-            }
-
-            calculateAndShowResults();
-        }
-
-        function calculateAndShowResults() {
-            console.log('Calculating results...'); // Debug log
-            
-            const results = {
-                listening: calculateSectionScore('listening'),
-                reading: calculateSectionScore('reading'),
-                structure: calculateSectionScore('structure')
-            };
-
-            console.log('Results:', results); // Debug log
-
-            const totalCorrect = results.listening.correct + results.reading.correct + results.structure.correct;
-            const totalQuestions = results.listening.total + results.reading.total + results.structure.total;
-            const totalScore = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
-
-            const resultHTML = `
+        const resultHTML = `
                 <div class="space-y-6">
                     <div class="text-center">
                         <div class="text-6xl font-bold text-blue-600 mb-2">${totalScore}%</div>
@@ -767,82 +1035,90 @@
                 </div>
             `;
 
-            document.getElementById('resultContent').innerHTML = resultHTML;
-            const modal = document.getElementById('resultModal');
-            modal.classList.add('show');
-            console.log('Modal should be visible now'); // Debug log
+        document.getElementById("resultContent").innerHTML = resultHTML;
+        const modal = document.getElementById("resultModal");
+        modal.classList.add("show");
+        console.log("Modal should be visible now"); // Debug log
+      }
+
+      function calculateSectionScore(section) {
+        const questions = testQuestions[section] || [];
+        const answers = userAnswers[section] || {};
+        let correct = 0;
+
+        console.log(`Calculating ${section}:`, {
+          questions: questions.length,
+          answers: Object.keys(answers).length,
+        }); // Debug log
+
+        questions.forEach((question, index) => {
+          const userAnswer = answers[index];
+          const correctAnswer = question.true_answer;
+
+          console.log(
+            `Question ${index + 1}: User answer: ${userAnswer}, Correct: ${correctAnswer}`,
+          ); // Debug log
+
+          if (userAnswer !== undefined && userAnswer === correctAnswer) {
+            correct++;
+          }
+        });
+
+        const result = {
+          correct: correct,
+          total: questions.length,
+          percentage:
+            questions.length > 0
+              ? Math.round((correct / questions.length) * 100)
+              : 0,
+        };
+
+        console.log(`${section} result:`, result); // Debug log
+        return result;
+      }
+
+      function startTimer() {
+        setInterval(() => {
+          const now = new Date();
+          const elapsed = new Date(now - startTime);
+          const hours = elapsed.getUTCHours().toString().padStart(2, "0");
+          const minutes = elapsed.getUTCMinutes().toString().padStart(2, "0");
+          const seconds = elapsed.getUTCSeconds().toString().padStart(2, "0");
+          document.getElementById("timer").textContent =
+            `${hours}:${minutes}:${seconds}`;
+        }, 1000);
+      }
+
+      function getTestDuration() {
+        const now = new Date();
+        const elapsed = new Date(now - startTime);
+        const hours = elapsed.getUTCHours();
+        const minutes = elapsed.getUTCMinutes();
+        const seconds = elapsed.getUTCSeconds();
+
+        if (hours > 0) {
+          return `${hours} jam ${minutes} menit ${seconds} detik`;
+        } else if (minutes > 0) {
+          return `${minutes} menit ${seconds} detik`;
+        } else {
+          return `${seconds} detik`;
         }
+      }
 
-        function calculateSectionScore(section) {
-            const questions = testQuestions[section] || [];
-            const answers = userAnswers[section] || {};
-            let correct = 0;
+      function hideLoading() {
+        document.getElementById("loading").classList.add("hidden");
+        document.getElementById("testContainer").classList.remove("hidden");
+      }
 
-            console.log(`Calculating ${section}:`, { questions: questions.length, answers: Object.keys(answers).length }); // Debug log
+      function closeModal() {
+        document.getElementById("resultModal").classList.remove("show");
+      }
 
-            questions.forEach((question, index) => {
-                const userAnswer = answers[index];
-                const correctAnswer = question.true_answer;
-                
-                console.log(`Question ${index + 1}: User answer: ${userAnswer}, Correct: ${correctAnswer}`); // Debug log
-                
-                if (userAnswer !== undefined && userAnswer === correctAnswer) {
-                    correct++;
-                }
-            });
-
-            const result = {
-                correct: correct,
-                total: questions.length,
-                percentage: questions.length > 0 ? Math.round((correct / questions.length) * 100) : 0
-            };
-
-            console.log(`${section} result:`, result); // Debug log
-            return result;
+      function closeModalOnOutsideClick(event) {
+        if (event.target === event.currentTarget) {
+          closeModal();
         }
-
-        function startTimer() {
-            setInterval(() => {
-                const now = new Date();
-                const elapsed = new Date(now - startTime);
-                const hours = elapsed.getUTCHours().toString().padStart(2, '0');
-                const minutes = elapsed.getUTCMinutes().toString().padStart(2, '0');
-                const seconds = elapsed.getUTCSeconds().toString().padStart(2, '0');
-                document.getElementById('timer').textContent = `${hours}:${minutes}:${seconds}`;
-            }, 1000);
-        }
-
-        function getTestDuration() {
-            const now = new Date();
-            const elapsed = new Date(now - startTime);
-            const hours = elapsed.getUTCHours();
-            const minutes = elapsed.getUTCMinutes();
-            const seconds = elapsed.getUTCSeconds();
-            
-            if (hours > 0) {
-                return `${hours} jam ${minutes} menit ${seconds} detik`;
-            } else if (minutes > 0) {
-                return `${minutes} menit ${seconds} detik`;
-            } else {
-                return `${seconds} detik`;
-            }
-        }
-
-        function hideLoading() {
-            document.getElementById('loading').classList.add('hidden');
-            document.getElementById('testContainer').classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('resultModal').classList.remove('show');
-        }
-
-        function closeModalOnOutsideClick(event) {
-            if (event.target === event.currentTarget) {
-                closeModal();
-            }
-        }
+      }
     </script>
-</body>
-
+  </body>
 </html>
