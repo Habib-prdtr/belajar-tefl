@@ -731,6 +731,14 @@
         userAnswers[section][questionIndex] = answerIndex;
         updateProgress();
         updateNumberGrid();
+
+        // Auto-next to the next question after a small delay
+        setTimeout(() => {
+          const totalQuestions = testQuestions[section].length;
+          if (questionIndex < totalQuestions - 1) {
+            goToNextQuestion();
+          }
+        }, 300);
       }
 
       function updateModuleInfo() {
