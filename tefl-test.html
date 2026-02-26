@@ -235,10 +235,39 @@
       .grid-overlay.show {
         display: block;
       }
+      /* Dark theme overrides */
+      body.dark {
+        background-color: #071226 !important;
+        color: #e6eef8;
+      }
+
+      body.dark .bg-white { background-color: #0b1724 !important; }
+      body.dark .bg-gray-100 { background-color: #071226 !important; }
+      body.dark .bg-gray-50 { background-color: #071226 !important; }
+      body.dark .text-gray-800, body.dark .text-gray-700, body.dark .text-gray-600, body.dark .text-gray-500 { color: #cbd5e1 !important; }
+      body.dark header.bg-white, body.dark header { background-color: #081422 !important; box-shadow: 0 1px 3px rgba(0,0,0,0.6); }
+      body.dark .test-section { background: #071427 !important; border-color: #1f2937 !important; color: #e6eef8 !important; }
+      body.dark .test-section.active { background: #081a2a !important; }
+      body.dark .question-item { background: #071427 !important; border-color: #102030 !important; color: #e6eef8 !important; }
+      body.dark .answer-option { background: transparent !important; border-color: #22303f !important; color: #dbeafe !important; }
+      body.dark .answer-option:hover { background: rgba(255,255,255,0.02) !important; }
+      body.dark .number-grid { background: #061426 !important; border-color: #132032 !important; color: #e6eef8 !important; box-shadow: 0 10px 25px rgba(0,0,0,0.6); }
+      body.dark .number-grid h3 { color: #e6eef8 !important; }
+      body.dark .number-button { background: transparent !important; border-color: #234151 !important; color: #cfe9ff !important; }
+      body.dark .number-button:hover { background: rgba(255,255,255,0.02) !important; border-color: #40566a !important; }
+      body.dark .number-button.answered { background: #059669 !important; color: white !important; border-color: #059669 !important; }
+      body.dark .number-button.current { background: #2563eb !important; color: white !important; border-color: #2563eb !important; }
+      body.dark .submit-button-sidebar { background: #0b5f73 !important; color: #e6eef8 !important; }
+      body.dark .submit-button-sidebar:hover { background: #0a5270 !important; }
+      body.dark .audio-container { background: linear-gradient(135deg, #07172a 0%, #082034 100%) !important; border-color: #0b3b61 !important; }
+      body.dark .modal > div { background: #081722 !important; color: #e6eef8 !important; }
+      body.dark .grid-overlay { background: rgba(0,0,0,0.7); }
+      body.dark .timer { color: #60a5fa !important; }
+
     </style>
   </head>
 
-  <body class="bg-gray-100 min-h-screen">
+  <body class="min-h-screen dark">
     <!-- Header -->
     <header class="bg-white shadow-md sticky top-0 z-50">
       <div class="container mx-auto px-6 py-4">
@@ -271,7 +300,7 @@
                 <span class="text-white font-bold text-sm md:text-lg">T</span>
               </div>
               <h1 class="text-lg md:text-2xl font-bold text-gray-800 truncate">
-                TEFL Test
+                Latihan dulu banh
               </h1>
             </div>
           </div>

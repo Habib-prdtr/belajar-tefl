@@ -42,11 +42,22 @@
         }
       }
     </style>
+    <style>
+      /* Dark theme overrides */
+      body.dark { background-color: #071226 !important; color: #e6eef8; }
+      body.dark .bg-white\/70, body.dark .bg-white { background-color: rgba(11,23,36,0.8) !important; }
+      body.dark .bg-gradient-to-br, body.dark .bg-gradient-to-r { background: linear-gradient(135deg,#071226,#071a2a) !important; }
+      body.dark .text-gray-600, body.dark .text-gray-500, body.dark .text-gray-700, body.dark .text-gray-900 { color: #cbd5e1 !important; }
+      body.dark header { background-color: #081422 !important; border-color: #122033 !important; box-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+      body.dark .bg-white\/70 { background-color: rgba(8,18,34,0.6) !important; }
+      body.dark .rounded-2xl, body.dark .shadow-xl { color: #e6eef8 !important; }
+      body.dark .text-indigo-700, body.dark .text-indigo-500 { color: #93c5fd !important; }
+      body.dark .bg-gray-50, body.dark .bg-gray-100 { background-color: #071226 !important; }
+      body.dark .animate-spin { border-color: rgba(255,255,255,0.1) !important; border-top-color: #60a5fa !important; }
+    </style>
   </head>
 
-  <body
-    class="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen"
-  >
+  <body class="min-h-screen dark">
     <!-- Header -->
     <header
       class="bg-white/80 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b border-indigo-100"
@@ -82,7 +93,7 @@
             <h1
               class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent truncate"
             >
-              TEFL Data Interface
+              Latihan Njir
             </h1>
           </div>
           <div class="text-sm text-gray-500" id="dataCount">Loading...</div>
